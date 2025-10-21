@@ -40,4 +40,22 @@ app.get('/api/mahasiswa ', (req, res) => {
     });
 });
 
+app.post('/api/mahasiswa', (req, res) => {
+    const { nama, nim, kelas, prodi } = req.body;
 
+    if (!nama || !nim || !kelas || !prodi) {
+        return res.status(400).json({message:'nama, nim, kelas, dan prodi harus diisi'});
+    }
+
+    db.query(
+        'INSERT INTO mahasiswa (nama, nim, kelas, prodi) VALUES (?, ?, ?, ?)',
+         [nama, nim, kelas, prodi], 
+         (err, results) => {
+            if (err) {
+                console.error(err);
+                return res.status(500).send({message:'Database error'});
+            }
+            res.status(201).json({message:'User created successfully'});
+            }
+    );
+});
